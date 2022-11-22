@@ -10,3 +10,35 @@
 }
 
 <h2>Admin</h2>
+@{
+    var teams = ViewData["Teams"] as IList<Team>;
+
+    foreach (var team in teams)
+    {
+        <table>
+            <tr>
+                <th class="text-center">@team.Name</th>
+            </tr>
+            @foreach (var participant in team.Participants.OrderBy(x => x.Roles))
+            {
+                <tr>
+                    <td>@participant.Name</td>
+                    <td>@participant.Surname</td>
+                    <td>@participant.Nickname</td>
+                    <td>@participant.Roles.ToString()</td>
+                    <td>@participant.Class</td>
+                    <td>
+                        @using (Html.BeginForm("DeleteParticipant", "Team"))
+                        {
+                            <input type="hidden" name="id" value=@participant.Id />
+                            <input type="hidden" name="teamId" value=@team.Id />
+                            <input type="submit" value="Usuń" />
+                        }
+                    </td>
+                </tr>
+            }
+        </table>
+        
+        <br/>
+    }
+}

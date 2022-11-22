@@ -46,6 +46,11 @@ public class TeamController : Controller
             {
                 return RedirectToAction(nameof(Create));
             }
+
+            if (_context.Teams.Include(x => x.Participants).Where(x => x.Participants.Any(x => x.Nickname == model.LeaderNickname)) is not null)
+            {
+                return RedirectToAction(nameof(Create));
+            }
             
             var leader = new Participant
             {
