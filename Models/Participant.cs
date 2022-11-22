@@ -15,6 +15,7 @@ public class Participant
     public string? PasswordHash { get; set; }
     public string? Salt { get; set; }
     public bool Leader { get; set; }
-
+    public bool IsAdmin { get; set; } = false;
+    
     public Team Team { get; set; } = null!;
 }

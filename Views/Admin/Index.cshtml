@@ -1,0 +1,12 @@
+﻿@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+
+    if (!Context.User.IsInRole("admin"))
+    {
+        <p> <span class="text-danger">404.</span> Access Denied.</p>
+        return;
+    }
+}
+
+<h2>Admin</h2>

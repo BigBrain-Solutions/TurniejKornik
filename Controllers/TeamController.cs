@@ -28,7 +28,7 @@ public class TeamController : Controller
     }
     
     
-    [Route("Create")]
+    [HttpGet("Create")]
     public IActionResult Create()
     {
         return View();
@@ -82,12 +82,6 @@ public class TeamController : Controller
         return RedirectToAction(nameof(Create));
     }
 
-    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public IActionResult Error()
-    {
-        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-    }
-    
     private (bool success, string content) Register(string nickname, Participant participant)
     {
         if (_context.Participants.Any(x => x.Nickname == nickname))

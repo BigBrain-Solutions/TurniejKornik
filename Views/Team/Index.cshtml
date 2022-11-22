@@ -13,14 +13,14 @@
 
     if (user is null)
     {
-        <p class="text-center">404. Nie masz dostępu do tych zasobów🤷‍♂</p>
+        <p class="text-center"><span class="text-danger">404.</span>. Nie masz dostępu do tych zasobów🤷‍♂</p>
         return;
     }
 }
 
 @if (!Context.User.Identity.IsAuthenticated || team.Id != user.Team.Id)
 {
-    <p class="text-center">404. Nie masz dostępu do tych zasobów🤷‍♂</p>
+    <p class="text-center"><span class="text-danger">404.</span> Nie masz dostępu do tych zasobów🤷‍♂</p>
     return;
 }
 
