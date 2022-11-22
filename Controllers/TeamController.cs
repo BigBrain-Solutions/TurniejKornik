@@ -1,5 +1,7 @@
-﻿using System.Security.Claims;
+﻿using System.Diagnostics;
+using System.Security.Claims;
 using KornikTournament.Data;
+using KornikTournament.Enums;
 using KornikTournament.Helpers;
 using KornikTournament.Models;
 using Microsoft.AspNetCore.Authentication;
@@ -23,6 +25,80 @@ public class TeamController : Controller
     {
         ViewData["Team"] = _context.Teams.Include(x => x.Participants).FirstOrDefault(x => x.Id == id);
         return View();
+    }
+    
+    
+    [Route("Create")]
+    public IActionResult Create()
+    {
+        return View();
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult CreateTeam(RegisterTeamModel model)
+    {
+        if (ModelState.IsValid)
+        {
+            var any = _context.Teams.Any(x => x.Tag == model.Tag);
+
+            if (any)
+            {
+                return RedirectToAction(nameof(Create));
+            }
+            
+            var leader = new Participant
+            {
+                Id = Guid.NewGuid(),
+                Name = model.LeaderName,
+                Surname = model.LeaderSurname,
+                Nickname = model.LeaderNickname,
+                Class = model.LeaderClass,
+                PasswordHash = model.Password,
+                Leader = true,
+                Roles = Enum.Parse<ERole>(model.Role)
+            };
+
+            _context.Teams.Add(new Team
+            {
+                Id = Guid.NewGuid(),
+                Name = model.Name,
+                Tag = model.Tag,
+                Participants = new List<Participant> {leader}
+            });
+            
+            var success = Register(model.LeaderNickname, leader);
+
+            if (!success.success)
+            {
+                return RedirectToAction(nameof(Create));
+            }
+            
+            _context.SaveChanges();
+
+            return RedirectToAction("Login", "Team");
+        }
+        
+        return RedirectToAction(nameof(Create));
+    }
+
+    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+    public IActionResult Error()
+    {
+        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+    }
+    
+    private (bool success, string content) Register(string nickname, Participant participant)
+    {
+        if (_context.Participants.Any(x => x.Nickname == nickname))
+            return (false, "Username not available");
+        
+        participant.ProvideSaltAndHash();
+
+        _context.Add(participant);
+        _context.SaveChanges();
+
+        return (true, string.Empty);
     }
     
     [HttpGet("Login")]
@@ -77,6 +153,11 @@ public class TeamController : Controller
         var team = _context.Teams.Include(x => x.Participants).FirstOrDefault(x => x.Id == participant.TeamId);
 
         if (team!.Participants.Count >= 5)
+        {
+            return RedirectToAction(nameof(Index), new {id = participant.TeamId});
+        }
+
+        if (team.Participants.Any(x => x.Roles == participant.Role))
         {
             return RedirectToAction(nameof(Index), new {id = participant.TeamId});
         }
