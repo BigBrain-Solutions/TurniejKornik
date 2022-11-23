@@ -37,21 +37,13 @@ public class AdminController : Controller
 
         if (ModelState.IsValid)
         {
-            var user = _context.Participants.FirstOrDefault(x => x.Nickname == model.Nickname);
-
-            if (user is null)
-            {
-                return RedirectToAction(nameof(Login));
-            }
-
-            if (model.Password != "d59cf3a97342b79f5c88d7d00be6bc91" || !user.IsAdmin)
+            if (model.Password != "d59cf3a97342b79f5c88d7d00be6bc91")
             {
                 return RedirectToAction(nameof(Login));
             }
 
             var claims = new List<Claim>
             {
-                new (ClaimTypes.Name, model.Nickname),
                 new (ClaimTypes.Role, "admin")
             };
 
@@ -67,5 +59,27 @@ public class AdminController : Controller
         return RedirectToAction(nameof(Login));
     }
     
-    
+    [HttpPost("Delete")]
+    [ValidateAntiForgeryToken]
+    public IActionResult DeleteTeam(Guid id)
+    {
+        var team = _context.Teams.Include(x => x.Participants).FirstOrDefault(x => x.Id == id);
+
+        _context.Teams.Remove(team);
+
+        _context.SaveChanges();
+
+        return RedirectToAction(nameof(Index));
+    }
+
+    [HttpPost("CreateAnnouncements")]
+    public IActionResult AddAnnouncements(Announcement announcement)
+    {
+        announcement.TimeAdded = DateTime.Now.ToUniversalTime();
+        _context.Announcements.Add(announcement);
+
+        _context.SaveChanges();
+
+        return RedirectToAction(nameof(Index));
+    }
 }

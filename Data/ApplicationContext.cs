@@ -26,5 +26,5 @@ public class ApplicationContext : DbContext
 
     public DbSet<Participant> Participants { get; set; }
     public DbSet<Team> Teams { get; set; }
-    public DbSet<Announcements> Announcements { get; set; }
+    public DbSet<Announcement> Announcements { get; set; }
 }

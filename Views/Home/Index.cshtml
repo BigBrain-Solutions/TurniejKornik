@@ -4,3 +4,17 @@
 }
 
 <h2>Ogłoszenia</h2>
+
+@foreach (var announcement in ViewData["Announcements"] as IList<Announcement> ?? new List<Announcement>())
+{
+    <div class="text-center w-50">
+        @if (announcement.TimeAdded == null)
+        {
+            announcement.TimeAdded = DateTime.MinValue;
+        }
+        <a>@announcement.TimeAdded.Value</a>
+        <h1 class="fw-bold">@announcement.Title</h1>
+        <p>@announcement.Content</p>
+    </div>
+}
+

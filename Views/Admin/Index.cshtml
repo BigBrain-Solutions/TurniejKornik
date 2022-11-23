@@ -1,21 +1,22 @@
-﻿@{
+﻿@model Announcement
+
+@{
     ViewBag.Title = "title";
     Layout = "_Layout";
 
     if (!Context.User.IsInRole("admin"))
     {
-        <p> <span class="text-danger">404.</span> Access Denied.</p>
+        <p> <span class="text-danger">401.</span> Access Denied.</p>
         return;
     }
 }
 
-<h2>Admin</h2>
 @{
     var teams = ViewData["Teams"] as IList<Team>;
 
-    foreach (var team in teams)
+    foreach (var team in teams ?? new List<Team>())
     {
-        <table>
+        <table class="table">
             <tr>
                 <th class="text-center">@team.Name</th>
             </tr>
@@ -38,7 +39,27 @@
                 </tr>
             }
         </table>
+    
+        @using (Html.BeginForm("DeleteTeam", "Team"))
+        {
+            <input type="hidden" name="id" value=@team.Id />
+            <input type="submit" value="Usuń drużyne" />
+        }
         
         <br/>
     }
+    
+    <div>
+        <form asp-controller="Admin" asp-action="AddAnnouncements">
+            <label class="control-label">Title</label>
+            <input asp-for="Title" class="form-control"/>
+            <span asp-validation-for="Title" class="text-danger"></span>
+                
+            <label class="control-label">Content</label>
+            <input asp-for="Content" class="form-control"/>
+            <span asp-validation-for="Content" class="text-danger"></span>
+    
+            <input type="submit" value="Add"/>
+        </form>
+    </div>
 }

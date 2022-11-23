@@ -46,11 +46,6 @@ public class TeamController : Controller
             {
                 return RedirectToAction(nameof(Create));
             }
-
-            if (_context.Teams.Include(x => x.Participants).Where(x => x.Participants.Any(x => x.Nickname == model.LeaderNickname)) is not null)
-            {
-                return RedirectToAction(nameof(Create));
-            }
             
             var leader = new Participant
             {
@@ -103,6 +98,15 @@ public class TeamController : Controller
     [HttpGet("Login")]
     public IActionResult Login()
     {
+        var leader = _context.Participants
+            .Include(x => x.Team)
+            .FirstOrDefault(x => HttpContext.User.Identity != null && x.Nickname == HttpContext.User.Identity.Name);
+        
+        if (leader != null && leader.Team is not null)
+        {
+            return RedirectToAction(nameof(Index), new {id = leader.Team.Id});
+        }
+        
         return View();
     }
     
@@ -112,7 +116,7 @@ public class TeamController : Controller
     {
         if (ModelState.IsValid)
         {
-            var participant = _context.Participants.Include(x => x.Team).FirstOrDefault(x => x.Nickname == loginModel.Nickname);
+            var participant = _context.Participants.Include(x => x.Team).FirstOrDefault(x => x.Nickname.ToLower() == loginModel.Nickname.ToLower());
 
             if (participant is null)
             {
@@ -177,7 +181,7 @@ public class TeamController : Controller
         return RedirectToAction(nameof(Index), new {id = participant.TeamId});
     }
     
-    [HttpPost("Delete")]
+    [HttpPost("DeleteParticipant")]
     [ValidateAntiForgeryToken]
     public IActionResult DeleteParticipant(Guid id, Guid teamId)
     {
@@ -188,6 +192,19 @@ public class TeamController : Controller
         
         return RedirectToAction(nameof(Index), new {id = teamId});
     }
+
+    [HttpPost("Delete")]
+    [ValidateAntiForgeryToken]
+    public IActionResult DeleteTeam(Guid id)
+    {
+        var team = _context.Teams.Include(x => x.Participants).FirstOrDefault(x => x.Id == id);
+
+        _context.Teams.Remove(team);
+
+        _context.SaveChanges();
+
+        return RedirectToAction(nameof(Create));
+    }   
     
     private bool TryLogin(string nickname, string password)
     {

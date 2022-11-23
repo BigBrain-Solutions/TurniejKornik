@@ -29,7 +29,7 @@
     <h1>@team.Name</h1>
     <h5>#@team.Tag</h5>
 
-    <table>
+    <table class="table">
         <tr>
             <th>Imie</th> <th>Nazwisko</th> <th>Nickname</th> <th>Rola</th> <th>Klasa</th> <th>Usuń</th>
         </tr>
@@ -76,7 +76,7 @@
                 <input asp-for="Class" class="form-control" placeholder="format: np. 4i1" maxlength="4"/>
                 <span asp-validation-for="Class" Title="text-danger"></span>
             
-                <label class="control-label">Rola zakładającego zespół</label>
+                <label class="control-label">Rola</label>
                 <select asp-for="Role">
                     <option>Top</option>
                     <option>Jg</option>
@@ -92,11 +92,13 @@
             </div>
         </form>
     }
+    
+    <br />
+    
+    @using (Html.BeginForm("DeleteTeam", "Team"))
+    {
+        <input type="hidden" name="Id" value=@team.Id />
+        <input type="submit" value="Usuń drużyne" class="btn btn-danger" />
+    }
 
 </div>
-
-<style>
-    table, td, th {
-        border: 1px solid black;
-    }
-</style>

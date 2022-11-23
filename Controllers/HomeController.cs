@@ -18,6 +18,7 @@ public class HomeController : Controller
 
     public IActionResult Index()
     {
+        ViewData["Announcements"] = _context.Announcements.OrderByDescending(x => x.TimeAdded).ToList();
         return View();
     }
     
