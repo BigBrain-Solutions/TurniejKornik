@@ -149,6 +149,14 @@ public class TeamController : Controller
         return RedirectToAction(nameof(Login));
     }
     
+    [HttpPost("Logout")]
+    public IActionResult Logout()
+    {
+        HttpContext.SignOutAsync();
+        
+        return RedirectToAction(nameof(Login));
+    }
+    
     [HttpPost("Add")]
     [ValidateAntiForgeryToken]
     public IActionResult AddToTeam(AddParticipant participant)
