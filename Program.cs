@@ -1,4 +1,5 @@
 using KornikTournament.Data;
+using KornikTournament.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 
@@ -6,6 +7,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+var settings = new Settings();
+builder.Configuration.Bind("Settings", settings);
+builder.Services.AddSingleton(settings);
 
 builder.Services.AddDbContext<ApplicationContext>(o 
     => o.UseNpgsql(builder.Configuration.GetConnectionString("DbString")));

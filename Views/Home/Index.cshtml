@@ -10,24 +10,16 @@
         @foreach (var announcement in ViewData["Announcements"] as IList<Announcement> ?? new List<Announcement>())
         {
             <div class="text-center p-5 m-4 announcement">
-                <a>@announcement.TimeAdded!.Value</a>
+                <a>@announcement.TimeAdded!.Value.Date.ToString("M") @announcement.TimeAdded.Value.Hour:@announcement.TimeAdded.Value.Minute</a>
                 <h1 class="fw-bold">@announcement.Title</h1>
                 <p>@announcement.Content</p>
-                <img src="@announcement.ImageUrl" alt=""/>
+                <img src="@announcement.ImageUrl" alt="" class="d-block m-auto w-50 text-center"/>
             </div>
         }
     </div>
 </div>
 
 <style>
-    img {
-      display: block;
-      margin-left: auto;
-      margin-right: auto;
-      width: 50%;
-      text-align: center;
-    }
-    
     .announcement {
         border-radius: 30px;
         background: rgb(25, 27, 30);

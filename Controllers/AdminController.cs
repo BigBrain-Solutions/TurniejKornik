@@ -12,10 +12,12 @@ namespace KornikTournament.Controllers;
 public class AdminController : Controller
 {
     private readonly ApplicationContext _context;
+    private readonly Settings _settings;
 
-    public AdminController(ApplicationContext context)
+    public AdminController(ApplicationContext context, Settings settings)
     {
         _context = context;
+        _settings = settings;
     }
     
     public IActionResult Index()
@@ -37,7 +39,7 @@ public class AdminController : Controller
 
         if (ModelState.IsValid)
         {
-            if (model.Password != "d59cf3a97342b79f5c88d7d00be6bc91")
+            if (model.Password != _settings.AdminPass)
             {
                 return RedirectToAction(nameof(Login));
             }
