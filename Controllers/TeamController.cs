@@ -235,7 +235,12 @@ public class TeamController : Controller
 
         var path = Environment.CurrentDirectory + "/Logs";
 
-        var date = DateTime.Now.ToString().Replace('.', '_').Replace(' ', '_').Replace(':', '-');
+        var date = DateTime.Now.ToString()
+            .Replace('.', '_')
+            .Replace(' ', '_')
+            .Replace(':', '-')
+            .Replace('/', '-');
+        
         System.IO.File.WriteAllText(path + $"/log_{date}.txt", log);
         
         return RedirectToAction(nameof(Create));
