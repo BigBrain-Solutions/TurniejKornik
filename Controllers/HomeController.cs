@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using KornikTournament.Data;
 using KornikTournament.Enums;
+using KornikTournament.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using KornikTournament.Models;
 using Microsoft.EntityFrameworkCore;
@@ -59,6 +60,11 @@ public class HomeController : Controller
             if (_context.Participants.Any(x => x.Nickname == participant.Nickname))
             {
                 return RedirectToAction(nameof(FreeAgents), new {error = ErrorTypes.AgentIsOnTheList});
+            }
+
+            if (!participant.Class.Validate())
+            {
+                return RedirectToAction(nameof(FreeAgents), new {error = ErrorTypes.ClassNotValid});
             }
             
             _context.Participants.Add(new Participant

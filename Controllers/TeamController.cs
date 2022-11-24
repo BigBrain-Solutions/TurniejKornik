@@ -23,9 +23,10 @@ public class TeamController : Controller
         _context = context;
     }
 
-    public IActionResult Index([FromQuery] Guid id)
+    public IActionResult Index([FromQuery] Guid id, [FromQuery] ErrorTypes? error)
     {
         ViewData["Team"] = _context.Teams.Include(x => x.Participants).FirstOrDefault(x => x.Id == id);
+        ViewData["error"] = error;
         return View();
     }
     
@@ -194,6 +195,11 @@ public class TeamController : Controller
             {
                 return RedirectToAction(nameof(Index), new {id = participant.TeamId});
             }
+            
+            if (!participant.Class.Validate())
+            {
+                return RedirectToAction(nameof(Index), new {id = participant.TeamId, error = ErrorTypes.ClassNotValid});
+            }
         
             _context.Participants.Add(new Participant
             {
@@ -226,9 +232,11 @@ public class TeamController : Controller
     
     [HttpPost("DeleteAgent")]
     [ValidateAntiForgeryToken]
-    public IActionResult DeleteAgent([FromForm] Guid id)
+    public IActionResult DeleteAgent(string agent)
     {
-        var p = _context.Participants.FirstOrDefault(x => x.Id == id);
+        // I dont fucking know why does Guid can't pass here, so i implemented this shitty ass bypass
+        var a = agent.Trim('/');
+        var p = _context.Participants.FirstOrDefault(x => x.Nickname == a);
         _context.Participants.Remove(p!);
 
         _context.SaveChanges();

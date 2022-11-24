@@ -1,4 +1,6 @@
 ﻿@using KornikTournament.Data
+@using KornikTournament.Enums
+@using KornikTournament.Helpers
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @using Microsoft.EntityFrameworkCore
 @model AddParticipant
@@ -16,6 +18,10 @@
         <p class="text-center"><span class="text-danger">404.</span> Nie masz dostępu do tych zasobów🤷‍♂</p>
         return;
     }
+    
+    var type = ViewData["Error"] as ErrorTypes?;
+
+    var error = ErrorHandler.HandleError(type);
 }
 
 @if (!Context.User.Identity.IsAuthenticated || team.Id != user.Team.Id)
@@ -94,6 +100,7 @@
 
             <div class="form-group">
                 <input type="submit" value="Dodaj członka drużyny" class="btn btn-primary"/>
+                <p class="text-danger">@error</p>
             </div>
         </form>
     }

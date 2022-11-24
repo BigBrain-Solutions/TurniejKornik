@@ -85,7 +85,7 @@
                         <td>
                             @using (Html.BeginForm("DeleteAgent", "Team"))
                             {
-                                <input type="hidden" name="id" value=@agent.Id/>
+                                <input type="hidden" name="agent" value=@agent.Nickname/>
                                 <input type="submit" value="Usuń"/>
                             }
                         </td>
