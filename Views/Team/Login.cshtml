@@ -1,4 +1,6 @@
 ﻿@using KornikTournament.Enums
+@using KornikTournament.Helpers
+@using Microsoft.AspNetCore.Mvc.TagHelpers
 @model LoginModel
 
 @{
@@ -9,12 +11,7 @@
 @{
     var type = ViewData["Error"] as ErrorTypes?;
 
-    var error = type switch
-    {
-        ErrorTypes.WrongPassword => "Złe hasło",
-        ErrorTypes.NullForm => "Wypełnij formularz",
-        _ => string.Empty
-        };
+    var error = ErrorHandler.HandleError(type);
 }
 
 <div class="text-center w-50" id="container">

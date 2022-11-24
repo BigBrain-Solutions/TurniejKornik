@@ -57,7 +57,12 @@ public class TeamController : Controller
             
             if (any)
             {
-                return RedirectToAction(nameof(Create));
+                return RedirectToAction(nameof(Create), new {error = ErrorTypes.TeamExists});
+            }
+
+            if (!model.LeaderClass.Validate())
+            {
+                return RedirectToAction(nameof(Create), new {error = ErrorTypes.ClassNotValid});
             }
             
             var leader = new Participant
