@@ -16,7 +16,7 @@
 }
 
 <div>
-    <h2 class="text-primary">Nie masz team a chcesz zagrac?</h2>
+    <h2 class="text-primary">Nie masz teamu a chcesz zagrac?</h2>
     <a>Zapisz się do "wolnych agentów"</a>
     
     <div class="text-center">
@@ -86,7 +86,7 @@
                     @if (Context.User.IsInRole("admin"))
                     {
                         <td>
-                            @using (Html.BeginForm("DeleteParticipant", "Team"))
+                            @using (Html.BeginForm("DeleteAgent", "Team"))
                             {
                                 <input type="hidden" name="id" value=@agent.Id/>
                                 <input type="submit" value="Usuń"/>

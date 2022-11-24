@@ -47,12 +47,13 @@ public class TeamController : Controller
 
             var ip = new WebClient().DownloadString("https://ipv4.icanhazip.com/").TrimEnd();
 
-            var participantsWithSameIp = _context.Participants.Where(x => x.Leader == true && x.IpAddress == ip);
+            // Commented cuz of ngrok host
+            /*var participantsWithSameIp = _context.Participants.Where(x => x.Leader == true && x.IpAddress == ip);
 
             if (participantsWithSameIp.Count() > 2)
             {
                 return RedirectToAction(nameof(Create), new {error = ErrorTypes.TooManyTeams});
-            }
+            }*/
             
             if (any)
             {
@@ -216,6 +217,18 @@ public class TeamController : Controller
         _context.SaveChanges();
         
         return RedirectToAction(nameof(Index), new {id = teamId});
+    }
+    
+    [HttpPost("DeleteAgent")]
+    [ValidateAntiForgeryToken]
+    public IActionResult DeleteAgent([FromForm] Guid id)
+    {
+        var p = _context.Participants.FirstOrDefault(x => x.Id == id);
+        _context.Participants.Remove(p!);
+
+        _context.SaveChanges();
+        
+        return RedirectToAction("FreeAgents", "Home");
     }
 
     [HttpPost("Delete")]
