@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.Net;
+﻿using System.Net;
 using System.Security.Claims;
 using KornikTournament.Data;
 using KornikTournament.Enums;
@@ -15,10 +14,12 @@ namespace KornikTournament.Controllers;
 [Route("[controller]")]
 public class TeamController : Controller
 {
+    private readonly ILogger<TeamController> _logger;
     private readonly ApplicationContext _context;
 
-    public TeamController(ApplicationContext context)
+    public TeamController(ILogger<TeamController> logger, ApplicationContext context)
     {
+        _logger = logger;
         _context = context;
     }
 
@@ -227,6 +228,16 @@ public class TeamController : Controller
 
         _context.SaveChanges();
 
+        var ip = new WebClient().DownloadString("https://ipv4.icanhazip.com/").TrimEnd();
+        var log = $"""Some one with ip: {ip} | deleted Team: "{team.Name}" on: {DateTime.Now}""";
+        
+        _logger.LogInformation(log);
+
+        var path = Environment.CurrentDirectory + "/Logs";
+
+        var date = DateTime.Now.ToString().Replace('.', '_').Replace(' ', '_').Replace(':', '-');
+        System.IO.File.WriteAllText(path + $"/log_{date}.txt", log);
+        
         return RedirectToAction(nameof(Create));
     }   
     

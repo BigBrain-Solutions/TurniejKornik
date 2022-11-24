@@ -15,12 +15,12 @@ public class ApplicationContext : DbContext
     {
         modelBuilder.Entity<Participant>(eb =>
         {
-            eb.HasOne(x => x.Team).WithMany(x => x.Participants);
+            eb.HasOne(x => x.Team).WithMany(x => x.Participants).OnDelete(DeleteBehavior.ClientCascade);
         });
         
         modelBuilder.Entity<Team>(eb =>
         {
-            eb.HasMany(x => x.Participants).WithOne(x => x.Team);
+            eb.HasMany(x => x.Participants).WithOne(x => x.Team).OnDelete(DeleteBehavior.ClientCascade);
         });
     }
 
