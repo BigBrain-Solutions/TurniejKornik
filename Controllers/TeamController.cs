@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Net;
 using System.Security.Claims;
 using KornikTournament.Data;
 using KornikTournament.Enums;
@@ -29,8 +30,9 @@ public class TeamController : Controller
     
     
     [HttpGet("Create")]
-    public IActionResult Create()
+    public IActionResult Create(ErrorTypes? error)
     {
+        ViewData["error"] = error;
         return View();
     }
 
@@ -40,8 +42,17 @@ public class TeamController : Controller
     {
         if (ModelState.IsValid)
         {
-            var any = _context.Teams.Any(x => x.Tag == model.Tag);
+            var any = _context.Teams.Any(x => x.Tag == model.Tag && x.Name == model.Name);
 
+            var ip = new WebClient().DownloadString("https://ipv4.icanhazip.com/").TrimEnd();
+
+            var participantsWithSameIp = _context.Participants.Where(x => x.Leader == true && x.IpAddress == ip);
+
+            if (participantsWithSameIp.Count() > 2)
+            {
+                return RedirectToAction(nameof(Create), new {error = ErrorTypes.TooManyTeams});
+            }
+            
             if (any)
             {
                 return RedirectToAction(nameof(Create));
@@ -56,7 +67,8 @@ public class TeamController : Controller
                 Class = model.LeaderClass,
                 PasswordHash = model.Password,
                 Leader = true,
-                Roles = Enum.Parse<ERole>(model.Role)
+                Roles = Enum.Parse<ERole>(model.Role),
+                IpAddress = ip
             };
 
             _context.Teams.Add(new Team
@@ -96,7 +108,7 @@ public class TeamController : Controller
     }
     
     [HttpGet("Login")]
-    public IActionResult Login()
+    public IActionResult Login(ErrorTypes? error)
     {
         var leader = _context.Participants
             .Include(x => x.Team)
@@ -106,7 +118,8 @@ public class TeamController : Controller
         {
             return RedirectToAction(nameof(Index), new {id = leader.Team.Id});
         }
-        
+
+        ViewData["Error"] = error;
         return View();
     }
     
@@ -125,7 +138,7 @@ public class TeamController : Controller
 
             if (!TryLogin(loginModel.Nickname, loginModel.Password))
             {
-                return RedirectToAction(nameof(Login));
+                return RedirectToAction(nameof(Login), new {error = ErrorTypes.WrongPassword});
             }
 
             var claims = new List<Claim>
@@ -146,7 +159,7 @@ public class TeamController : Controller
             }
         }
 
-        return RedirectToAction(nameof(Login));
+        return RedirectToAction(nameof(Login), new {error = ErrorTypes.NullForm});
     }
     
     [HttpPost("Logout")]
@@ -161,30 +174,33 @@ public class TeamController : Controller
     [ValidateAntiForgeryToken]
     public IActionResult AddToTeam(AddParticipant participant)
     {
-        var team = _context.Teams.Include(x => x.Participants).FirstOrDefault(x => x.Id == participant.TeamId);
-
-        if (team!.Participants.Count >= 5)
+        if (ModelState.IsValid)
         {
-            return RedirectToAction(nameof(Index), new {id = participant.TeamId});
-        }
+            var team = _context.Teams.Include(x => x.Participants).FirstOrDefault(x => x.Id == participant.TeamId);
 
-        if (team.Participants.Any(x => x.Roles == participant.Role))
-        {
-            return RedirectToAction(nameof(Index), new {id = participant.TeamId});
-        }
+            if (team!.Participants.Count >= 5)
+            {
+                return RedirectToAction(nameof(Index), new {id = participant.TeamId});
+            }
+
+            if (team.Participants.Any(x => x.Roles == participant.Role))
+            {
+                return RedirectToAction(nameof(Index), new {id = participant.TeamId});
+            }
         
-        _context.Participants.Add(new Participant
-        {
-            Id = Guid.NewGuid(),
-            Name = participant.Name,
-            Surname = participant.Surname,
-            Nickname = participant.Nickname,
-            Roles = participant.Role,
-            Class = participant.Class,
-            Team = team
-        });
+            _context.Participants.Add(new Participant
+            {
+                Id = Guid.NewGuid(),
+                Name = participant.Name,
+                Surname = participant.Surname,
+                Nickname = participant.Nickname,
+                Roles = participant.Role,
+                Class = participant.Class,
+                Team = team
+            });
 
-        _context.SaveChanges();
+            _context.SaveChanges();
+        }
         
         return RedirectToAction(nameof(Index), new {id = participant.TeamId});
     }

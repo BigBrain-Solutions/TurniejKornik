@@ -1,10 +1,21 @@
-﻿@model LoginModel
+﻿@using KornikTournament.Enums
+@model LoginModel
 
 @{
     ViewBag.Title = "Zaloguj się by zarządzać drużyną";
     Layout = "_Layout";
 }
 
+@{
+    var type = ViewData["Error"] as ErrorTypes?;
+
+    var error = type switch
+    {
+        ErrorTypes.WrongPassword => "Złe hasło",
+        ErrorTypes.NullForm => "Wypełnij formularz",
+        _ => string.Empty
+        };
+}
 
 <div class="text-center w-50" id="container">
     <h2>Zaloguj się by zarządzać drużyną</h2> <span>(Tylko dla leaderów drużyn)</span>
@@ -21,6 +32,7 @@
             <input asp-for="Password" class="form-control" type="password" />
             <span asp-validation-for="Password" class="text-danger"></span>
             
+            <p class="text-danger">@error</p>
         </div>
         <div class="form-group">
             <input type="submit" value="Zaloguj się" class="btn btn-primary" />

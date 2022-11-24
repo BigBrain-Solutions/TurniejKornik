@@ -16,6 +16,7 @@ public class Participant
     public string? Salt { get; set; }
     public bool Leader { get; set; }
     public bool IsAdmin { get; set; } = false;
+    public string? IpAddress { get; set; }
     
     public Team Team { get; set; } = null!;
 }

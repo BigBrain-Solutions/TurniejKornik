@@ -77,10 +77,13 @@ public class AdminController : Controller
     [HttpPost("CreateAnnouncements")]
     public IActionResult AddAnnouncements(Announcement announcement)
     {
-        announcement.TimeAdded = DateTime.Now.ToUniversalTime();
-        _context.Announcements.Add(announcement);
+        if (ModelState.IsValid)
+        {
+            announcement.TimeAdded = DateTime.Now.ToUniversalTime();
+            _context.Announcements.Add(announcement);
 
-        _context.SaveChanges();
+            _context.SaveChanges();   
+        }
 
         return RedirectToAction(nameof(Index));
     }

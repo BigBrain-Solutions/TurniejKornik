@@ -102,7 +102,7 @@
         @using (Html.BeginForm("DeleteTeam", "Team"))
         {
             <input type="hidden" name="Id" value=@team.Id />
-            <input type="submit" value="Usuń drużyne" class="btn btn-danger" />
+            <input type="submit" value="Usuń drużyne" class="btn btn-danger right" />
         }
     
         @using (Html.BeginForm("Logout", "Team"))
@@ -112,3 +112,9 @@
     </div>
     
 </div>
+
+<style>
+    .right {
+        margin-right: 1rem;
+    }
+</style>
