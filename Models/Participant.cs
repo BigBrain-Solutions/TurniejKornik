@@ -18,5 +18,5 @@ public class Participant
     public bool IsAdmin { get; set; } = false;
     public string? IpAddress { get; set; }
     
-    public Team Team { get; set; } = null!;
+    public Team? Team { get; set; } = null!;
 }

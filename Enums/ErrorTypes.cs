@@ -4,5 +4,6 @@ public enum ErrorTypes
 {
     WrongPassword,
     NullForm,
-    TooManyTeams
+    TooManyTeams,
+    AgentIsOnTheList
 }

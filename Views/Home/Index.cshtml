@@ -13,7 +13,23 @@
                 <a>@announcement.TimeAdded!.Value.Date.ToString("M") @announcement.TimeAdded.Value.Hour:@announcement.TimeAdded.Value.Minute</a>
                 <h1 class="fw-bold">@announcement.Title</h1>
                 <p>@announcement.Content</p>
-                <img src="@announcement.ImageUrl" alt="" class="d-block m-auto w-50 text-center"/>
+                
+                @if (!string.IsNullOrEmpty(announcement.ImageUrl))
+                {
+                    <img src="@announcement.ImageUrl" alt="" class="d-block m-auto w-50 text-center"/>
+                }
+                
+                @if (Context.User.IsInRole("admin"))
+                {
+                    <div class="m-2">
+                        @using (Html.BeginForm("DeleteAnnouncement", "Home"))
+                        {
+                            <input type="hidden" name="Id" value=@announcement.Id />
+                            <input type="submit" value="Usuń" class="btn btn-danger right" />
+                        }
+                    </div>
+                }
+
             </div>
         }
     </div>

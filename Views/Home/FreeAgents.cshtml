@@ -1,0 +1,104 @@
+﻿@using KornikTournament.Enums
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model AddParticipant
+
+@{
+    ViewBag.Title = "Wolni agenci";
+    Layout = "_Layout";
+    
+    var type = ViewData["Error"] as ErrorTypes?;
+
+    var error = type switch
+    {
+        ErrorTypes.AgentIsOnTheList => "Agent już jest na liście",
+        _ => string.Empty
+        };
+}
+
+<div>
+    <h2 class="text-primary">Nie masz team a chcesz zagrac?</h2>
+    <a>Zapisz się do "wolnych agentów"</a>
+    
+    <div class="text-center">
+        <form asp-action="FreeAgents" autocomplete="off">
+        
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="w-100 d-flex justify-content-center">
+                <div class="form-group team_form">
+    
+                    <label class="control-label">Imie</label>
+                    <input asp-for="Name" class="form-control"/>
+                    <span asp-validation-for="Name" Title="text-danger"></span>
+    
+                    <label class="control-label">Nazwisko</label>
+                    <input asp-for="Surname" class="form-control"/>
+                    <span asp-validation-for="Surname" Title="text-danger"></span>
+    
+                    <label class="control-label">Summoner name</label>
+                    <input asp-for="Nickname" class="form-control"/>
+                    <span asp-validation-for="Nickname" Title="text-danger"></span>
+    
+                    <label class="control-label">Klasa</label>
+                    <input asp-for="Class" class="form-control" placeholder="format: np. 4i1" maxlength="4"/>
+                    <span asp-validation-for="Class" Title="text-danger"></span>
+                
+                    <div class="m-4">
+                        <label class="control-label">Rola</label>
+                        <select asp-for="Role" class="bg-dark text-light">
+                            <option>Top</option>
+                            <option>Jg</option>
+                            <option>Mid</option>
+                            <option>Adc</option>
+                            <option>Support</option>
+                        </select>
+                    </div>
+    
+                    <input asp-for="TeamId" value="@Guid.Empty" hidden/>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Dodaj" class="btn btn-primary"/>
+                <p class="text-danger">@error</p>
+            </div>
+        </form>
+    </div>
+    
+    <div class="agents mt-2">
+        <h2 class="text-center text-light">Lista wolnych agentów</h2>
+        <table class="table text-light">
+            <tr>
+                <th>Imie</th> <th>Nazwisko</th> <th>Nickname</th> <th>Rola</th> <th>Klasa</th>
+                @if (Context.User.IsInRole("admin"))
+                {
+                    <th>Usuń</th>
+                }
+            </tr>
+
+            @foreach (var agent in ViewData["agents"] as IList<Participant> ?? new List<Participant>())
+            {
+                <tr>
+                    <td>@agent.Name</td>
+                    <td>@agent.Surname</td>
+                    <td>@agent.Nickname</td>
+                    <td>@agent.Roles.ToString()</td>
+                    <td>@agent.Class</td>
+                    @if (Context.User.IsInRole("admin"))
+                    {
+                        <td>
+                            @using (Html.BeginForm("DeleteParticipant", "Team"))
+                            {
+                                <input type="hidden" name="id" value=@agent.Id/>
+                                <input type="submit" value="Usuń"/>
+                            }
+                        </td>
+                    }
+
+                </tr>
+            }
+
+        </table>
+
+    </div>
+    
+</div>

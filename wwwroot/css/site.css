@@ -43,3 +43,13 @@ input {
     width: 33%;
   }
 }
+
+@media (max-width: 667px) {
+  .contact {
+    font-size: large;
+  }
+  
+  #container {
+    width: 100% !important;
+  }
+}
