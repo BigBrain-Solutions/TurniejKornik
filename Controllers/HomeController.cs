@@ -33,9 +33,9 @@ public class HomeController : Controller
 
     [HttpPost("Announcement")]
     [ValidateAntiForgeryToken]
-    public IActionResult DeleteAnnouncement(int id)
+    public IActionResult DeleteAnnouncement(string id)
     {
-        var announcement = _context.Announcements.First(x => x.Id == id);
+        var announcement = _context.Announcements.First(x => x.Id.ToString() == id);
 
         _context.Announcements.Remove(announcement);
 

@@ -16,15 +16,15 @@
                 }
                 
                 <a>@announcement.TimeAdded!.Value.Date.ToString("M") @hour:@switch(minutes)
-                {
-                    case < 10:
-                        var m = $"0{minutes}";
-                        @m
-                        break;
-                    default:
-                        @minutes
-                        break;
-                }
+                                                                           {
+                                                                               case < 10:
+                                                                                   var m = $"0{minutes}";
+                                                                                   @m
+                                                                                   break;
+                                                                               default:
+                                                                                   @minutes
+                                                                                   break;
+                                                                           }
                 </a>
                 <h1 class="fw-bold">@announcement.Title</h1>
                 <p>@announcement.Content</p>
@@ -37,9 +37,9 @@
                 @if (Context.User.IsInRole("admin"))
                 {
                     <div class="m-2">
-                        @using (Html.BeginForm("DeleteAnnouncement", "Home"))
+                        @using (Html.BeginForm("DeleteAnnouncement", "Home", FormMethod.Post))
                         {
-                            <input type="hidden" name="Id" value=@announcement.Id/>
+                            <input type="hidden" name="id" value=@announcement.Id />
                             <input type="submit" value="Usuń" class="btn btn-danger right"/>
                         }
                     </div>

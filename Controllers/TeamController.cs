@@ -232,11 +232,9 @@ public class TeamController : Controller
     
     [HttpPost("DeleteAgent")]
     [ValidateAntiForgeryToken]
-    public IActionResult DeleteAgent(string agent)
+    public IActionResult DeleteAgent(Guid id)
     {
-        // I dont fucking know why does Guid can't pass here, so i implemented this shitty ass bypass
-        var a = agent.Trim('/');
-        var p = _context.Participants.FirstOrDefault(x => x.Nickname == a);
+        var p = _context.Participants.FirstOrDefault(x => x.Id == id);
         _context.Participants.Remove(p!);
 
         _context.SaveChanges();
