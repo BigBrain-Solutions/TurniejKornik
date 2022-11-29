@@ -10,6 +10,14 @@
     var type = ViewData["Error"] as ErrorTypes?;
 
     var error = ErrorHandler.HandleError(type);
+    
+    var state = TournamentSettingsHelper.GetTournamentState();
+
+    if (state == ETournamentState.Ended || state == ETournamentState.Started)
+    {
+        <p class="text-danger">Turniej się skończył lub wystartował</p>
+        return;
+    }
 }
 
 <div>

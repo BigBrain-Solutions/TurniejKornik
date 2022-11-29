@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 using KornikTournament.Data;
+using KornikTournament.Helpers;
 using KornikTournament.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -23,6 +24,7 @@ public class AdminController : Controller
     public IActionResult Index()
     {
         ViewData["Teams"] = _context.Teams.Include(x => x.Participants).ToList();
+        ViewData["TournamentSettings"] = TournamentSettingsHelper.Read();
         return View();
     }
     
@@ -83,6 +85,29 @@ public class AdminController : Controller
             _context.Announcements.Add(announcement);
 
             _context.SaveChanges();   
+        }
+
+        return RedirectToAction(nameof(Index));
+    }
+
+    [Route("ChangeDate")]
+    public IActionResult ChangeDate()
+    {
+        ViewData["Settings"] = TournamentSettingsHelper.Read();
+        return View();
+    }
+
+    [HttpPost("ChangeDate")]
+    public IActionResult ChangeDateConfirmed(ChangeDate date)
+    {
+        if (ModelState.IsValid)
+        {
+            var settings = TournamentSettingsHelper.Read();
+
+            settings.StartDate = date.StartDate;
+            settings.EndDate = date.EndDate;
+        
+            TournamentSettingsHelper.Write(settings);
         }
 
         return RedirectToAction(nameof(Index));

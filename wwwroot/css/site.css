@@ -38,6 +38,10 @@ input[type="submit"] {
   border: none;
 }
 
+a:hover {
+  color: #0a53be !important;
+}
+
 @media (min-width: 992px) {
   .announcements {
     width: 50%;
@@ -45,6 +49,12 @@ input[type="submit"] {
   
   .team_form {
     width: 33%;
+  }
+  
+  .teams {
+    display: flex;
+    width: 100%;
+    justify-content: center;
   }
 }
 
@@ -55,5 +65,15 @@ input[type="submit"] {
   
   #container {
     width: 100% !important;
+  }
+
+  .teams {
+    display: block;
+    width: auto;
+  }
+  
+  tbody {
+    display: block;
+    width: 70%;
   }
 }

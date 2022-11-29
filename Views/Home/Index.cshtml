@@ -1,9 +1,25 @@
-﻿@{
+﻿@using KornikTournament.Helpers
+@using KornikTournament.Enums
+@{
     ViewBag.Title = "Ogłoszenia";
     Layout = "_Layout";
 }
 
 <h2 class="text-center">Ogłoszenia</h2>
+
+@if (TournamentSettingsHelper.GetTournamentState() == ETournamentState.OnGoing)
+{
+    <div class="d-flex justify-content-around">
+        <div>
+            <h4 class="text-light">Start turnieju za: </h4>
+            <h5 id="startOfTournament" class="text-secondary"></h5>
+        </div>
+        <div>
+            <h4 class="text-light">Koniec zapisów za: </h4>
+            <h5 id="endOfEntries" class="text-secondary"></h5>
+        </div>
+    </div>   
+}
 
 <div class="d-flex justify-content-center">
     <div class="announcements">
@@ -56,3 +72,5 @@
         background: rgb(25, 27, 30);
     }
 </style>
+
+<script src="js/timer.js"></script>

@@ -1,0 +1,40 @@
+﻿@using KornikTournament.Enums
+@using KornikTournament.Helpers
+@{
+    ViewBag.Title = "Teams";
+    Layout = "_Layout";
+
+    if (TournamentSettingsHelper.GetTournamentState() == ETournamentState.OnGoing)
+    {
+        <p class="text-danger">Wróć tu jak turniej wystartuje.</p>
+        return;
+    }
+
+    var teams = ViewData["Announcements"] as List<Team>;
+}
+
+
+    @foreach (var team in teams)
+    {
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col" colspan="5">@team.Name #@team.Tag</th>
+            </tr>
+            </thead>
+            <tbody>
+                
+                @foreach (var participant in team.Participants)
+                {
+                    <tr class="text-light">
+                        <td>@participant.Name</td>
+                        <td>@participant.Surname</td>
+                        <td>@participant.Nickname</td>
+                        <td>@participant.Roles</td>
+                    </tr>
+                }
+            
+            </tbody>
+        </table>
+    }
+    

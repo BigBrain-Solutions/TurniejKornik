@@ -31,6 +31,13 @@ public class HomeController : Controller
         return View();
     }
 
+    [Route("Teams")]
+    public IActionResult Teams()
+    {
+        ViewData["Announcements"] = _context.Teams.Include(x => x.Participants).OrderByDescending(x => x.Name).ToList();
+        return View();
+    }
+    
     [HttpPost("Announcement")]
     [ValidateAntiForgeryToken]
     public IActionResult DeleteAnnouncement(string id)

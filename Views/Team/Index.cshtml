@@ -22,6 +22,8 @@
     var type = ViewData["Error"] as ErrorTypes?;
 
     var error = ErrorHandler.HandleError(type);
+
+    var state = TournamentSettingsHelper.GetTournamentState();
 }
 
 @if (!Context.User.Identity.IsAuthenticated || team.Id != user.Team.Id)
@@ -37,7 +39,11 @@
 
     <table class="table text-light">
         <tr>
-            <th>Imie</th> <th>Nazwisko</th> <th>Nickname</th> <th>Rola</th> <th>Klasa</th> <th>Usuń</th>
+            <th>Imie</th> <th>Nazwisko</th> <th>Nickname</th> <th>Rola</th> <th>Klasa</th> 
+            @if (state != ETournamentState.Ended && state != ETournamentState.Started)
+            {
+                <th>Usuń</th>
+            }
         </tr>
         @foreach (var participant in team.Participants.OrderBy(x => x.Roles))
         {
@@ -47,14 +53,19 @@
                 <td>@participant.Nickname</td>
                 <td>@participant.Roles.ToString()</td>
                 <td>@participant.Class</td>
-                <td>
-                    @using (Html.BeginForm("DeleteParticipant", "Team"))
-                    {
-                        <input type="hidden" name="id" value=@participant.Id />
-                        <input type="hidden" name="teamId" value=@team.Id />
-                        <input type="submit" value="Usuń" />
-                    }
-                </td>
+                
+                @if(state != ETournamentState.Ended && state != ETournamentState.Started)
+                {
+                    <td>
+                        @using (Html.BeginForm("DeleteParticipant", "Team"))
+                        {
+                            <input type="hidden" name="id" value=@participant.Id />
+                            <input type="hidden" name="teamId" value=@team.Id />
+                            <input type="submit" value="Usuń" />
+                        }
+                    </td>
+                }
+
             </tr>
         }
     </table>
@@ -106,16 +117,19 @@
     }
     
     <div class="w-100 d-flex justify-content-center flex-grow-0 mt-3 p-2">
-        @using (Html.BeginForm("DeleteTeam", "Team"))
+        @if (state != ETournamentState.Ended && state != ETournamentState.Started)
         {
-            <input type="hidden" name="Id" value=@team.Id />
-            <input type="submit" value="Usuń drużyne" class="btn btn-danger right" />
+            using (Html.BeginForm("DeleteTeam", "Team"))
+            {
+                <input type="hidden" name="Id" value=@team.Id/>
+                <input type="submit" value="Usuń drużyne" class="btn btn-danger right"/>
+            }
         }
-    
+
         @using (Html.BeginForm("Logout", "Team"))
         {
-            <input type="submit" value="Wyloguj się" class="btn btn-danger" />
-        }    
+            <input type="submit" value="Wyloguj się" class="btn btn-danger"/>
+        }
     </div>
     
 </div>

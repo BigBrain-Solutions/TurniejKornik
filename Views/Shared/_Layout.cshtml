@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@using KornikTournament.Helpers
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using KornikTournament.Enums
+<!DOCTYPE html>
 <html lang="en">
     <!-- bWFkZSBieSDFgXVrYXN6IE1yb3dpZWMsIHBvd2VyZWQgYnkgUmVtaWsgU3p5bWN6YWsKCmZvciBhbnkgcG9zc2libGUgZXhwbG9pdHMgbWVzc2VnZSB1cyBvbiBHSCwgY3V6IGl0cyB3YXMgbWFkZSBpbiAyIGRheXM= -->
 <head>
@@ -21,18 +24,32 @@
             </button>
             <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                 <ul class="navbar-nav flex-grow-1">
+                @if (TournamentSettingsHelper.GetTournamentState() != ETournamentState.Ended && TournamentSettingsHelper.GetTournamentState() != ETournamentState.Started)
+                {
                     <li class="nav-item">
                         <a class="nav-link text-white" asp-area="" asp-controller="Team" asp-action="Create">Stwórz drużyne</a>
                     </li>
+                }
                     <li class="nav-item">
                         <a class="nav-link text-white" asp-area="" asp-controller="Team" asp-action="Login">Panel leadera drużyny</a>
                     </li>
+                @if (TournamentSettingsHelper.GetTournamentState() != ETournamentState.Ended && TournamentSettingsHelper.GetTournamentState() != ETournamentState.Started)
+                {
                     <li class="nav-item">
                         <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="FreeAgents">"Wolni agenci"</a>
                     </li>
+                }
                     <li class="nav-item">
                         <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Contact">Skontakuj się z nami</a>
                     </li>
+                
+                @if (TournamentSettingsHelper.GetTournamentState() != ETournamentState.OnGoing)
+                {
+                    <li class="nav-item">
+                        <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Teams">Wszystkie drużyny</a>
+                    </li>
+                }
+                
                 </ul>
             </div>
         </div>
