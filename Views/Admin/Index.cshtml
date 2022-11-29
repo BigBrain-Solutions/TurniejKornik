@@ -37,7 +37,15 @@
             @foreach (var participant in team.Participants.OrderBy(x => x.Roles))
             {
                 <tr>
+                @if (participant.Leader)
+                {
+                    <td class="text-danger">@participant.Name</td>
+                }
+                else
+                {
                     <td>@participant.Name</td>
+                }
+                
                     <td>@participant.Surname</td>
                     <td>@participant.Nickname</td>
                     <td>@participant.Roles.ToString()</td>

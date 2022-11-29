@@ -14,7 +14,7 @@
         clearInterval(x);
         document.getElementById("endOfEntries").innerHTML = "";
     }
-}, 1);
+}, 1000);
 
 let x = setInterval(startOfTournament = () => {
     const date = new Date("Dec 8, 2022 07:00:00");
@@ -32,12 +32,12 @@ let x = setInterval(startOfTournament = () => {
         clearInterval(x);
         document.getElementById("startOfTournament").innerHTML = "";
     }
-}, 1);
+}, 1000);
 
 const formatTheTimer = (days, hours, minutes, seconds, id) => {
     let e = document.getElementById(id);
     
-    if (days > 1) {
+    if (days > 0) {
         e.innerHTML = days + " dni " + hours + " godzin ";
     }
     
@@ -49,16 +49,27 @@ const formatTheTimer = (days, hours, minutes, seconds, id) => {
         e.classList.add("text-danger");
     }
     
-    if (hours < 1) {
+    if (days < 1 && hours < 1) {
         e.innerHTML = minutes + " minut " + seconds + " sekund ";
         
         e.classList.remove("text-secondary");
         e.classList.add("text-danger");
     }
     
-    if (minutes < 1) {
-        e.innerHTML = seconds + " sekund ";
-
+    if (days < 1 && hours < 1 && minutes < 1) {
+        
+        if (seconds < 5) {
+            e.innerHTML = seconds + " sekundy ";
+        } else {
+            e.innerHTML = seconds + " sekund";
+        }
+        
+        if (seconds === 1) {
+            e.innerHTML = seconds + " sekunda";
+        } else {
+            e.innerHTML = seconds + " sekund";
+        }
+        
         e.classList.remove("text-secondary");
         e.classList.add("text-danger");
     }

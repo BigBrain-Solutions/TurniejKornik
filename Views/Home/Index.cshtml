@@ -31,7 +31,7 @@
                     var minutes = announcement.TimeAdded.Value.Minute;
                 }
                 
-                <a>@announcement.TimeAdded!.Value.Date.ToString("M") @hour:@switch(minutes)
+                <span>@announcement.TimeAdded!.Value.Date.ToString("M") @hour:@switch(minutes)
                                                                            {
                                                                                case < 10:
                                                                                    var m = $"0{minutes}";
@@ -41,7 +41,7 @@
                                                                                    @minutes
                                                                                    break;
                                                                            }
-                </a>
+                </span>
                 <h1 class="fw-bold">@announcement.Title</h1>
                 <p>@announcement.Content</p>
 

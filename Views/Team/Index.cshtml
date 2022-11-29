@@ -121,7 +121,7 @@
         {
             using (Html.BeginForm("DeleteTeam", "Team"))
             {
-                <input type="hidden" name="Id" value=@team.Id/>
+                <input type="hidden" name="Id" value="@team.Id" />
                 <input type="submit" value="Usuń drużyne" class="btn btn-danger right"/>
             }
         }
