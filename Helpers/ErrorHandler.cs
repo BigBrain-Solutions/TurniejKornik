@@ -14,6 +14,8 @@ public static class ErrorHandler
             ErrorTypes.AgentIsOnTheList => "Agent jest już na liście",
             ErrorTypes.TeamExists => "Drużyna już istnieje",
             ErrorTypes.ClassNotValid => "Zły format klasy lub klasa nie istnieje",
+            ErrorTypes.TeamDeleted => "Usunąłeś drużyne",
+            ErrorTypes.ParticipantDeleted => "Usunąłeś osobę z drużyny",
             _ => string.Empty
         };
     }

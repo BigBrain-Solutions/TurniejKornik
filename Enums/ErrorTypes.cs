@@ -7,5 +7,7 @@ public enum ErrorTypes
     TooManyTeams,
     AgentIsOnTheList,
     TeamExists,
-    ClassNotValid
+    ClassNotValid,
+    TeamDeleted,
+    ParticipantDeleted
 }

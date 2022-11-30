@@ -14,7 +14,7 @@
         clearInterval(x);
         document.getElementById("endOfEntries").innerHTML = "";
     }
-}, 1000);
+}, 100);
 
 let x = setInterval(startOfTournament = () => {
     const date = new Date("Dec 8, 2022 07:00:00");

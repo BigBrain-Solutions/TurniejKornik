@@ -47,7 +47,11 @@
         </tr>
         @foreach (var participant in team.Participants.OrderBy(x => x.Roles))
         {
-            <tr>
+            var red = "";
+            <tr @if (participant.Leader)
+                {
+                    red = "text-danger";
+                } class="@red">
                 <td>@participant.Name</td>
                 <td>@participant.Surname</td>
                 <td>@participant.Nickname</td>
@@ -57,11 +61,14 @@
                 @if(state != ETournamentState.Ended && state != ETournamentState.Started)
                 {
                     <td>
-                        @using (Html.BeginForm("DeleteParticipant", "Team"))
+                        @if(!participant.Leader)
                         {
-                            <input type="hidden" name="id" value=@participant.Id />
-                            <input type="hidden" name="teamId" value=@team.Id />
-                            <input type="submit" value="Usuń" />
+                            using (Html.BeginForm("DeleteParticipant", "Team", new {message = ErrorTypes.ParticipantDeleted}))
+                            {
+                                <input type="hidden" name="id" value=@participant.Id />
+                                <input type="hidden" name="teamId" value=@team.Id />
+                                <input type="submit" value="Usuń" />
+                            }
                         }
                     </td>
                 }
@@ -119,10 +126,10 @@
     <div class="w-100 d-flex justify-content-center flex-grow-0 mt-3 p-2">
         @if (state != ETournamentState.Ended && state != ETournamentState.Started)
         {
-            using (Html.BeginForm("DeleteTeam", "Team"))
+            using (Html.BeginForm("DeleteTeam", "Team", new {message = ErrorTypes.TeamDeleted}))
             {
                 <input type="hidden" name="Id" value="@team.Id" />
-                <input type="submit" value="Usuń drużyne" class="btn btn-danger right"/>
+                <input type="submit" value="Usuń drużyne" class="btn btn-danger right text-danger"/>
             }
         }
 

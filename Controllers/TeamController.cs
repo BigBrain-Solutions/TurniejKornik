@@ -220,14 +220,14 @@ public class TeamController : Controller
     
     [HttpPost("DeleteParticipant")]
     [ValidateAntiForgeryToken]
-    public IActionResult DeleteParticipant(Guid id, Guid teamId)
+    public IActionResult DeleteParticipant(Guid id, Guid teamId, ErrorTypes? message)
     {
         var p = _context.Participants.FirstOrDefault(x => x.Id == id);
         _context.Participants.Remove(p!);
 
         _context.SaveChanges();
         
-        return RedirectToAction(nameof(Index), new {id = teamId});
+        return RedirectToAction(nameof(Index), new {id = teamId, error = message});
     }
     
     [HttpPost("DeleteAgent")]
@@ -244,7 +244,7 @@ public class TeamController : Controller
 
     [HttpPost("Delete")]
     [ValidateAntiForgeryToken]
-    public IActionResult DeleteTeam(Guid id)
+    public IActionResult DeleteTeam(Guid id, ErrorTypes? message)
     {
         var team = _context.Teams.Include(x => x.Participants).FirstOrDefault(x => x.Id == id);
 
@@ -267,7 +267,7 @@ public class TeamController : Controller
         
         System.IO.File.WriteAllText(path + $"/log_{date}.txt", log);
         
-        return RedirectToAction(nameof(Create));
+        return RedirectToAction(nameof(Create), new {error = message});
     }   
     
     private bool TryLogin(string nickname, string password)
