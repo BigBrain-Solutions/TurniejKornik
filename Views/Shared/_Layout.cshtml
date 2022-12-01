@@ -24,7 +24,7 @@
             </button>
             <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                 <ul class="navbar-nav flex-grow-1">
-                @if (TournamentSettingsHelper.GetTournamentState() != ETournamentState.Ended && TournamentSettingsHelper.GetTournamentState() != ETournamentState.Started)
+                @if (TournamentSettingsHelper.GetTournamentState() == ETournamentState.OnGoing)
                 {
                     <li class="nav-item">
                         <a class="nav-link text-white" asp-area="" asp-controller="Team" asp-action="Create">Stwórz drużyne</a>
@@ -43,7 +43,7 @@
                         <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Contact">Skontakuj się z nami</a>
                     </li>
                 
-                @if (TournamentSettingsHelper.GetTournamentState() != ETournamentState.OnGoing)
+                @if (TournamentSettingsHelper.GetTournamentState() != ETournamentState.OnGoing && TournamentSettingsHelper.GetTournamentState() != ETournamentState.EntriesEnded)
                 {
                     <li class="nav-item">
                         <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Teams">Wszystkie drużyny</a>

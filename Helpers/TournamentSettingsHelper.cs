@@ -52,6 +52,11 @@ public static class TournamentSettingsHelper
             Write(settings);
             return ETournamentState.Ended;
         }
+
+        if (settings.EntriesEnd.ToUniversalTime() < DateTime.Now.ToUniversalTime())
+        {
+            return ETournamentState.EntriesEnded;
+        }
         
         return ETournamentState.OnGoing;
     }

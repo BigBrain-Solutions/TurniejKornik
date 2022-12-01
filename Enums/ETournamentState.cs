@@ -3,6 +3,7 @@
 public enum ETournamentState
 {
     OnGoing,
+    EntriesEnded,
     Started,
     Ended
 }

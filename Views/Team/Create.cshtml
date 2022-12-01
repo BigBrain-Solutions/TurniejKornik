@@ -16,6 +16,12 @@
         <p class="text-danger">Turniej się skończył lub wystartował</p>
         return;
     }
+
+    if (state == ETournamentState.EntriesEnded)
+    {
+        <p class="text-danger">Wpisy na turniej zostały zakończone</p>
+        return;
+    }
 }
 
 @{
