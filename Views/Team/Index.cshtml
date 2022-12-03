@@ -14,7 +14,7 @@
     var user = context.Participants.Include(x => x.Team).FirstOrDefault(x => x.Nickname == Context.User.Identity.Name) ?? new Participant { Name = null, Surname = null, Nickname = null, Class = null };
     var state = TournamentSettingsHelper.GetTournamentState();
 
-    if (state != ETournamentState.Started)
+    if (state == ETournamentState.OnGoing)
     {
         if (user is null)
         {
@@ -28,7 +28,7 @@
     var error = ErrorHandler.HandleError(type);
 }
 
-@if (state != ETournamentState.Started)
+@if (state == ETournamentState.OnGoing)
 {
     if (team.Id != user.Team.Id)
     {
@@ -45,7 +45,7 @@
     <table class="table text-light">
         <tr>
             <th>Imie</th> <th>Nazwisko</th> <th>Nickname</th> <th>Rola</th>
-            @if (state != ETournamentState.Ended && state != ETournamentState.Started)
+            @if (state == ETournamentState.OnGoing)
             {
                 <th>Klasa</th>
                 <th>Usuń</th>
@@ -63,7 +63,7 @@
                 <td>@participant.Nickname</td>
                 <td>@participant.Roles.ToString()</td>
 
-                @if(state != ETournamentState.Ended && state != ETournamentState.Started)
+                @if(state == ETournamentState.OnGoing)
                 {
                     <td>@participant.Class</td>
                     
@@ -131,7 +131,7 @@
     }
     
     <div class="w-100 d-flex justify-content-center flex-grow-0 mt-3 p-2">
-        @if (state != ETournamentState.Ended && state != ETournamentState.Started)
+        @if (state == ETournamentState.OnGoing)
         {
             using (Html.BeginForm("DeleteTeam", "Team", new {message = ErrorTypes.TeamDeleted}))
             {
