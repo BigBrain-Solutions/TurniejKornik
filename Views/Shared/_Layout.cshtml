@@ -24,34 +24,38 @@
             </button>
             <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                 <ul class="navbar-nav flex-grow-1">
-                @if (TournamentSettingsHelper.GetTournamentState() == ETournamentState.OnGoing)
-                {
-                    <li class="nav-item">
-                        <a class="nav-link text-white" asp-area="" asp-controller="Team" asp-action="Create">Stwórz drużyne</a>
-                    </li>
-                }
+                    @if (TournamentSettingsHelper.GetTournamentState() == ETournamentState.OnGoing)
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-area="" asp-controller="Team" asp-action="Create">Stwórz drużyne</a>
+                        </li>
+                    }
                     <li class="nav-item">
                         <a class="nav-link text-white" asp-area="" asp-controller="Team" asp-action="Login">Panel leadera drużyny</a>
                     </li>
-                @if (TournamentSettingsHelper.GetTournamentState() != ETournamentState.Ended && TournamentSettingsHelper.GetTournamentState() != ETournamentState.Started)
-                {
-                    <li class="nav-item">
-                        <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="FreeAgents">"Wolni agenci"</a>
-                    </li>
-                }
+                    @if (TournamentSettingsHelper.GetTournamentState() != ETournamentState.Ended && TournamentSettingsHelper.GetTournamentState() != ETournamentState.Started)
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="FreeAgents">"Wolni agenci"</a>
+                        </li>
+                    }
+                
+                    @if (TournamentSettingsHelper.GetTournamentState() != ETournamentState.OnGoing && TournamentSettingsHelper.GetTournamentState() != ETournamentState.EntriesEnded)
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link text-primary" asp-area="" asp-controller="Home" asp-action="Teams">Wszystkie drużyny</a>
+                        </li>
+                    }
                     <li class="nav-item">
                         <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Contact">Skontakuj się z nami</a>
                     </li>
-                
-                @if (TournamentSettingsHelper.GetTournamentState() != ETournamentState.OnGoing && TournamentSettingsHelper.GetTournamentState() != ETournamentState.EntriesEnded)
-                {
-                    <li class="nav-item">
-                        <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Teams">Wszystkie drużyny</a>
-                    </li>
-                }
-                
+
                 </ul>
+                <a href="https://www.zsdil.pl/" target="”_blank”" id="a_logo">
+                    <img src="favicon.png" alt="" width="64" id="logo"/>
+                </a>
             </div>
+
         </div>
     </nav>
 </header>

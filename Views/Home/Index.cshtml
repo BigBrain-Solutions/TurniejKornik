@@ -95,7 +95,6 @@ let a = setInterval(endOfEntries = () => {
     
     if (dif < 0) {
         clearInterval(a);
-        document.getElementById("endOfEntries").innerHTML = "";
     }
 }, 100);
 
@@ -113,13 +112,15 @@ let x = setInterval(startOfTournament = () => {
 
     if (dif < 0) {
         clearInterval(x);
-        document.getElementById("startOfTournament").innerHTML = "";
     }
 }, 100);
 
 const formatTheTimer = (days, hours, minutes, seconds, id) => {
     let e = document.getElementById(id);
     
+    if(!e)
+        return;
+        
     if (days > 0) {
         e.innerHTML = days + " dni " + hours + " godzin ";
     }

@@ -9,32 +9,36 @@
         <p class="text-danger">Wróć tu jak turniej wystartuje.</p>
         return;
     }
-
-    var teams = ViewData["Announcements"] as List<Team>;
 }
 
+<div class="d-flex w-100">
+    <div class="teams">
+        @foreach (var team in ViewData["Announcements"] as List<Team> ?? new List<Team>())
+        {
+            <div class="text-center p-5 m-4 team">
+                <a asp-action="Index" asp-controller="Team" asp-route-id="@team.Id" class="text-light text-decoration-none">
+                    <h3>@team.Name</h3>
+                    <h5>#@team.Tag</h5>
+                </a>
+            </div>
+        }
+    </div>
+</div>
+      
 
-    @foreach (var team in teams)
-    {
-        <table class="table">
-            <thead>
-            <tr>
-                <th scope="col" colspan="5">@team.Name #@team.Tag</th>
-            </tr>
-            </thead>
-            <tbody>
-                
-                @foreach (var participant in team.Participants)
-                {
-                    <tr class="text-light">
-                        <td>@participant.Name</td>
-                        <td>@participant.Surname</td>
-                        <td>@participant.Nickname</td>
-                        <td>@participant.Roles</td>
-                    </tr>
-                }
-            
-            </tbody>
-        </table>
+<style>
+    .team {
+        overflow-wrap: break-word;
+        width: 30%;
+        border-radius: 30px;
+        background: rgb(25, 27, 30);
     }
-    
+        
+    .teams {
+      width: 100%;
+      display: flex; 
+      flex-direction: row;
+      place-content: center;
+      flex-wrap: wrap;
+    }
+</style>

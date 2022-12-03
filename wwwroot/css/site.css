@@ -76,4 +76,25 @@ a:hover {
     display: block;
     width: 70%;
   }
+  
+  .table {
+    display: flex;
+    justify-content: center;
+  }
+
+  .teams {
+    flex-direction: column !important;
+  }
+  
+  .team {
+    width: 100% !important;
+  }
+  
+  .team h3 {
+    font-size: 2rem;
+  }
+  
+  a > #logo {
+    display: none;
+  }
 }
